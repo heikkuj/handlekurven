@@ -5,8 +5,9 @@ export default function Home() {
   return (
     <div className="">
       <main className="">
-        <p>abc</p>
-        <List />
+        <div className="my-2 p-5">
+          <List />
+        </div>
       </main>
     </div>
   );

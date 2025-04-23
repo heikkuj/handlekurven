@@ -1,12 +1,12 @@
 'use client'
 
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const LoginButton = (props: any) => {
   return <div className='bg-primary-1'>
-        <div>Du er ikke innlogget. Logg inn for å dele lister.</div>
-        <div>
+        <div className='flex px-2 pt-2 justify-between'>
+          <p>Logg inn for å dele lister.</p>
           <button onClick={props.toggleLoggedIn}>Logg inn</button>
         </div>
         </div>
@@ -14,8 +14,8 @@ const LoginButton = (props: any) => {
 
 const LogoutButton = (props: any) => {
   return <div className='bg-primary-1'>
-  <div>Hei!</div>
-  <div>
+  <div className='flex px-2 pt-2 justify-between'>
+    <p className=''>Hei!</p>
     <button onClick={props.toggleLoggedIn}>Logg ut</button>
   </div>
   </div>

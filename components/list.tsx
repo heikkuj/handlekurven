@@ -16,20 +16,24 @@ export default function List() {
     const [shoppingList, setShoppingList] = useState<number>(0);
     const [isMounted, setIsMounted] = useState<boolean>(false);
     
-    // useEffect(() => {
-    //     setIsMounted(true);
-    //     const savedItems = localStorage.getItem('items');
-    //     if (savedItems) {
-    //         setItems(JSON.parse(savedItems) as Item[]);
-    //     }
-    // })
+    // Save list items to localStorage
+    useEffect(() => {
+        setIsMounted(true);
+        const savedItems = localStorage.getItem('items');
+        if (savedItems) {
+            setItems(JSON.parse(savedItems) as Item[]);
+        }
+    }, []);
 
-    // useEffect(() => {
-    //     if (isMounted) {
-    //         localStorage.setItem('items', JSON.stringify(items));
-    //     }
-    // }, [items, isMounted]);
+    // Show items in localStorage
+    useEffect(() => {
+        if (isMounted) {
+            localStorage.setItem('items', JSON.stringify(items));
+        }
+    }, [items, isMounted]);
 
+
+    // Add new item to list
     const addItem = (): void => {
         if (newItem.trim() !== '') {
             setItems([...items, { id: Date.now(), text: newItem, bought: false}]);
@@ -38,6 +42,7 @@ export default function List() {
         console.log(items);
     };
 
+    // Check off item
     const toggleItemBought = (id: number): void => {
         setItems(
             items.map((item) =>
@@ -45,11 +50,13 @@ export default function List() {
         );
     };
 
+    // Edit item text
     const startEditingItem = (id: number, text: string): void => {
         setEditItemId(id);
         setEditedItemText(text);
     };
 
+    // Save item text after edit
     const updateItem = (): void => {
         if (editedItemText.trim() !== '') {
             setItems(
@@ -61,25 +68,28 @@ export default function List() {
         }
     };
 
+    // Delete item
     const deleteItem = (id: number): void => {
         setItems(items.filter((item) => item.id !== id));
     };
 
-    // if (!isMounted) {
-    //     return null;
-    // };
+    if (!isMounted) {
+        return null;
+    };
 
 return (
     <>
     {/* Add item */}
-    <input
-        type='text'
-        placeholder='Vare'
-        value={newItem}
-        onChange={(e: ChangeEvent<HTMLInputElement>) => setNewItem(e.target.value) }
-        className="p-2 w-[70vw] border-1 border-black"/>
-    <button onClick={addItem} 
-    className="ml-2 p-2 border-1 border-black">Legg til</button>
+    <div className="flex mb-7">
+        <input
+            type='text'
+            placeholder='Vare'
+            value={newItem}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setNewItem(e.target.value) }
+            className="p-2 w-[70vw] rounded-sm border-1 border-black"/>
+        <button onClick={addItem} 
+        className="ml-2 px-4 bg-primary-2 rounded-sm font-bold text-xl">+</button>
+    </div>
 
     <div className="flex flex-col gap-5 my-2">
         {/* Map all items in list by id*/}
@@ -100,11 +110,14 @@ return (
                         type="text"
                         value={editedItemText}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setEditedItemText(e.target.value)}
-                        onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
-                            if (e.key === "Enter") {
-                                updateItem();
-                            }
-                        }} />
+
+                        // Not working yet - submit input after hitting enter
+                        // onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
+                        //     if (e.key === "Enter") {
+                        //         updateItem();
+                        //     }
+                        // }} 
+                        />
                     ) : (
                         <span
                             className={`${item.bought ? 'line-through text-gray-500' : ''}`}>
@@ -120,10 +133,10 @@ return (
                     ) : (
                         <button 
                         onClick={() => startEditingItem(item.id, item.text)} 
-                        className="p-2 mr-1 border-1 border-black">Rediger</button>
+                        className="p-2 bg-primary-3 text-white mr-1 rounded-sm">Rediger</button>
                     )}
                     {/* Delete item */}
-                    <button onClick={() => deleteItem(item.id)} className="p-2 border-1 border-black">Slett</button>
+                    <button onClick={() => deleteItem(item.id)} className="p-2 bg-primary-4 text-white rounded-sm">Slett</button>
                 </div>
             </div>
         ))}
